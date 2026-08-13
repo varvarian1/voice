@@ -1,0 +1,6 @@
+README.md
+venv
+
+src/__pycache__
+src/audio/__pycache__
+src/speech/__pycache__
