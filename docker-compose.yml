@@ -2,7 +2,3 @@ services:
   python-app:
     build: .
     restart: unless-stopped
-    devices:
-      - /dev/snd:/dev/snd
-    group_add:
-      - audio
