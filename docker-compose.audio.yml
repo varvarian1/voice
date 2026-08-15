@@ -1,6 +1,9 @@
-services:
-  python-app:
-    devices:
-      - /dev/snd:/dev/snd
-    group_add:
-      - audio
+# Проброс аудио-устройства (микрофон) в контейнер — работает только на Linux-сервере
+# с реальной звуковой картой. Временно закомментировано, пока тестируем LLM-часть
+# без реального аудио.
+# services:
+#   python-app:
+#     devices:
+#       - /dev/snd:/dev/snd
+#     group_add:
+#       - audio

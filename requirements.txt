@@ -9,6 +9,7 @@ ctranslate2==4.8.1
 cuda-bindings==13.3.1
 cuda-pathfinder==1.6.0
 cuda-toolkit==13.0.3.0
+ddgs==9.14.4
 faster-whisper==1.2.1
 filelock==3.32.2
 flatbuffers==25.12.19
@@ -43,6 +44,7 @@ omegaconf==2.3.1
 onnxruntime==1.28.0
 packaging==26.3
 protobuf==7.35.1
+pygame==2.6.1
 PyAudio==0.2.14
 pycparser==3.0
 PyYAML==6.0.3

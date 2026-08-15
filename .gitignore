@@ -1,10 +1,12 @@
 README.md
 venv
-
+.claude
 src/__pycache__
 src/audio/__pycache__
 src/speech/__pycache__
 src/tts/__pycache__
+__pycache__
 
 # model
 latest_silero_models.yml
+models/ollama/

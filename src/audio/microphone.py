@@ -21,7 +21,7 @@ class Microphone:
         try:
             data = self.stream.read(AUDIO_CHUNK, exception_on_overflow=False)
             return np.frombuffer(data, dtype=np.int16)
-        
+
         except Exception:
             return np.zeros(AUDIO_CHUNK, dtype=np.int16)
 
@@ -31,7 +31,7 @@ class Microphone:
                              verbose=False):
         """
         Record audio until silence is detected.
-        Returns raw PCM bytes (int16). 
+        Returns raw PCM bytes (int16).
         If verbose=False, no console output is produced.
         """
         frames = []

@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Официальный PyPI (files.pythonhosted.org) отдаёт из РФ/СНГ на единицы КБ/с — зеркало Aliyun на порядок быстрее
+RUN pip install --no-cache-dir -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
 COPY src/ ./src/
 
