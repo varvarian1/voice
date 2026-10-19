@@ -25,15 +25,12 @@ class Microphone:
 
     def get_chunk(self):
         """Read one audio chunk as a numpy array of int16."""
-        audio = sd.rec(
-            int(self.chunk),
-            samplerate=self.sample_rate,
-            channels=1,
-            dtype='int16',
-            blocking=True
-        )
-        sd.wait()
-        return audio.flatten()
+        try:
+            data = self.stream.read(AUDIO_CHUNK, exception_on_overflow=False)
+            return np.frombuffer(data, dtype=np.int16)
+
+        except Exception:
+            return np.zeros(AUDIO_CHUNK, dtype=np.int16)
 
     def record_until_silence(self, max_duration=RECORDING_MAX_DURATION,
                              silence_threshold=RECORDING_SILENCE_THRESHOLD,
@@ -42,6 +39,7 @@ class Microphone:
         """
         Record audio until silence is detected.
         Returns raw PCM bytes (int16).
+        If verbose=False, no console output is produced.
         """
         frames = []
         silent_count = 0
@@ -68,4 +66,6 @@ class Microphone:
         return b''.join(frames)
 
     def close(self):
-        pass
+        self.stream.stop_stream()
+        self.stream.close()
+        self.p.terminate()
