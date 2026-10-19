@@ -7,6 +7,7 @@ import os
 AUDIO_CHANNELS = 1
 AUDIO_RATE = 16000
 AUDIO_CHUNK = int(AUDIO_RATE * 0.5)   # 0.5 seconds
+SAMPLE_WIDTH = 2
 
 # Optional: specify input device index (None = auto-detect)
 MICROPHONE_DEVICE_INDEX = None

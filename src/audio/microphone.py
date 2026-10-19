@@ -1,20 +1,27 @@
-import pyaudio
+import sounddevice as sd
 import numpy as np
 from config import (
-    AUDIO_FORMAT, AUDIO_CHANNELS, AUDIO_RATE, AUDIO_CHUNK,
+    AUDIO_RATE, AUDIO_CHUNK,
     RECORDING_MAX_DURATION, RECORDING_SILENCE_THRESHOLD, RECORDING_SILENCE_CHUNKS
 )
 
 class Microphone:
-    def __init__(self):
-        self.p = pyaudio.PyAudio()
-        self.stream = self.p.open(
-            format=AUDIO_FORMAT,
-            channels=AUDIO_CHANNELS,
-            rate=AUDIO_RATE,
-            input=True,
-            frames_per_buffer=AUDIO_CHUNK
-        )
+    def __init__(self, device_index=None):
+        self.device_index = device_index
+        self.sample_rate = AUDIO_RATE
+        self.chunk = AUDIO_CHUNK
+
+        if device_index is not None:
+            sd.default.device = device_index
+
+        try:
+            default_input = sd.default.device
+            if isinstance(default_input, tuple):
+                default_input = default_input[0]
+            info = sd.query_devices(default_input, 'input')
+            print(f"Microphone: using '{info['name']}' (index {default_input})")
+        except Exception as e:
+            print(f"Warning: could not determine default input device: {e}")
 
     def get_chunk(self):
         """Read one audio chunk as a numpy array of int16."""
@@ -36,16 +43,14 @@ class Microphone:
         """
         frames = []
         silent_count = 0
-        recorded_chunks = 0
-        max_chunks = int(max_duration * AUDIO_RATE / AUDIO_CHUNK)
+        max_chunks = int(max_duration * self.sample_rate / self.chunk)
 
         if verbose:
             print("Listening... (speak now)")
 
-        while recorded_chunks < max_chunks:
+        for _ in range(max_chunks):
             chunk = self.get_chunk()
             frames.append(chunk.tobytes())
-            recorded_chunks += 1
 
             rms = np.sqrt(np.mean(chunk.astype(np.float32)**2))
             if rms < silence_threshold:
