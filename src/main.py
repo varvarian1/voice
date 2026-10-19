@@ -4,14 +4,14 @@ import json
 from audio.microphone import Microphone
 from speech.whisper_recognizer import WhisperRecognizer
 from tts.speaker import Speaker
-from config import AUDIO_RATE, AUDIO_CHANNELS
+from config import AUDIO_RATE, AUDIO_CHANNELS, SAMPLE_WIDTH, MICROPHONE_DEVICE_INDEX
 from vosk import Model, KaldiRecognizer
 
 VOSK_MODEL_PATH = "models/vosk-model-ru/vosk-model-small-ru-0.22"
 KEYWORDS = ["оли", "олли", "оливер", " олливер", "olli", "oli"] # variants
 
 def main():
-    mic = Microphone()
+    mic = Microphone(device_index=MICROPHONE_DEVICE_INDEX)
     recognizer = WhisperRecognizer()
     speaker = Speaker()
 
@@ -35,7 +35,7 @@ def main():
             partial = json.loads(vosk_recognizer.PartialResult())
             text = partial.get("partial", "")
             if text:
-                print(f"Partial: {text}") # Show everything
+                print(f"Partial: {text}")
                 #speaker.say(text)
 
                 # Check for keywords
@@ -48,14 +48,14 @@ def main():
                             audio_bytes,
                             sample_rate=AUDIO_RATE,
                             channels=AUDIO_CHANNELS,
-                            sample_width=2
+                            sample_width=SAMPLE_WIDTH
                         )
                         if transcribed:
                             print(f"Command: {transcribed}") # final output
                             speaker.say(transcribed)
                     # Optional: small delay to avoid re-triggering
                     # import time; time.sleep(0.5)
-
+                    
     except Exception:
         pass
 
